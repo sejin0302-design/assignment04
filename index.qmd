@@ -1,0 +1,12 @@
+---
+title: "Data Science for Public Policy (assignment04)"
+author: "Sejin Kim (Net ID: sk2723)"
+format: html
+editor: source
+embed-resources: true
+execute:
+  warning: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+---
