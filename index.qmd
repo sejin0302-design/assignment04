@@ -76,9 +76,98 @@ education_bachelor |>
     subtitle = "Share of adults age 25 and older with a bachelor's degree or higher, 2024",
     x = "Bachelor's degree or higher",
     y = NULL,
-    caption = "Source: U.S. Census Bureau, 2024 American Community Survey 1-Year Estimates, Table B15003"
+    caption = "Source: U.S. Census Bureau, 2024 American Community Survey 1-Year Estimates"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.caption = element_text(hjust = 0)
+  )
 ```
+
+## 2. Educational Attainment and Household Income
+
+The first visualization showed substantial differences in educational attainment across states. This visualization examines whether those differences are associated with household income. Each point represents a state, with colors and shapes indicating Census regions.  
+(Data source: [U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B15003](https://data.census.gov/table?q=B19013&g=010XX00US$0400000&y=2024)
+
+```{r}
+income <- read_csv("data/B19013.csv")
+glimpse(income)
+
+income <- income |>
+  select(ends_with("Estimate")) |>
+  rename_with(
+    ~ str_remove(.x, "!!Estimate$"),
+    ends_with("!!Estimate")
+  ) |>
+  pivot_longer(
+    cols = everything(),
+    names_to = "state",
+    values_to = "median_income"
+  ) |>
+  filter(!state %in% c("District of Columbia", "Puerto Rico"))
+
+education_income <- education_bachelor |>
+  left_join(income, by = "state") |>
+  mutate(region = case_when(
+    state %in% c(
+      "Connecticut", "Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont", "New Jersey", "New York", "Pennsylvania") ~ "Northeast",
+    state %in% c(
+      "Indiana", "Illinois", "Michigan", "Ohio", "Wisconsin", "Iowa", "Kansas", "Minnesota", "Missouri", "Nebraska", "North Dakota", "South Dakota") ~ "Midwest",
+    state %in% c(
+      "Delaware", "Florida", "Georgia", "Maryland", "North Carolina", "South Carolina", "Virginia", "West Virginia", "Alabama", "Kentucky", "Mississippi", "Tennessee", "Arkansas", "Louisiana", "Oklahoma", "Texas") ~ "South",
+    state %in% c(
+      "Arizona", "Colorado", "Idaho", "Montana", "Nevada", "New Mexico", "Utah", "Wyoming", "Alaska", "California", "Hawaii", "Oregon", "Washington"
+    ) ~ "West"
+  ))
+
+education_income |>
+  ggplot(aes(
+    x = bachelor_pct,
+    y = median_income
+  )) +
+  geom_point(
+    aes(color = region,
+        shape = region),
+    size = 3,
+    alpha = 0.7,
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = FALSE,
+    color = "black"
+  ) +
+  scale_shape_manual(
+    values = c(
+      "Midwest" = 16,
+      "Northeast" = 17,
+      "South" = 15,
+      "West" = 18
+    )
+  ) +
+  scale_x_continuous(
+    labels = scales::label_percent(scale = 1)
+  ) +
+  scale_y_continuous(
+    labels = scales::label_dollar()
+  ) +
+  labs(
+    title = "Educational Attainment and Household Income Across the U.S. States",
+    subtitle = "Median household income and bachelor's degree attainment by Census region, 2024",
+    x = "Bacelor's degree or higher",
+    y = "Median household income",
+    color = "Census region",
+    shape = "Census region",
+    caption = "Source: U.S. Census Bureau, 2024 American Community Survey 1-Year Estimates"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.caption = element_text(hjust = 0)
+  )
+
+```
+
+## 3. 
+
+
 
 
