@@ -80,6 +80,8 @@ education_bachelor |>
   ) +
   theme_minimal() +
   theme(
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
     plot.caption = element_text(hjust = 0)
   )
 ```
@@ -151,7 +153,7 @@ education_income |>
     labels = scales::label_dollar()
   ) +
   labs(
-    title = "Educational Attainment and Household Income Across the U.S. States",
+    title = "Educational Attainment and Household Income Across U.S. States",
     subtitle = "Median household income and bachelor's degree attainment by Census region, 2024",
     x = "Bacelor's degree or higher",
     y = "Median household income",
@@ -161,12 +163,138 @@ education_income |>
   ) +
   theme_minimal() +
   theme(
+    panel.grid.minor = element_blank(),
     plot.caption = element_text(hjust = 0)
   )
 
 ```
 
-## 3. 
+## 3. Gender Differences in Educational Attainment
+
+The first two visualizations examined educational attainment across states and its relationship with household income. This visualization adds a demographic dimension by comparing the share of men and women age 25 and older with a bachelor's degree or higher across states. The distance between the two points represents the gender gap in educational attainment within each state.  
+(Data source: [U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B15002](https://data.census.gov/table?q=B15002&g=010XX00US$0400000&y=2024)
+
+```{r}
+#| fig-height: 10
+
+gender <- read_csv("data/B15002.csv")
+glimpse(gender)
+
+gender |>
+  select(`Label (Grouping)`) |>
+  print(n = Inf)
+
+gender <- gender |>
+  mutate(
+    label = str_trim(`Label (Grouping)`),
+    sex = case_when(
+      label == "Male:" ~ "Male",
+      label == "Female:" ~ "Female"
+    )
+  ) |>
+  fill(sex) |>
+  select(-`Label (Grouping)`)
+
+gender <- gender |>
+  select(label, sex, ends_with("Estimate")) |>
+  rename_with(
+    ~ str_remove(.x, "!!Estimate$"),
+    ends_with("!!Estimate")
+  ) |>
+  pivot_longer(
+    cols = -c(label, sex),
+    names_to = "state",
+    values_to = "population"
+  )
+  
+gender_bachelor <- gender |>
+  filter(
+    label %in% c(
+      "Male:",
+      "Female:",
+      "Bachelor's degree",
+      "Master's degree",
+      "Professional school degree",
+      "Doctorate degree"
+    )) |>
+  group_by(state, sex) |>
+  summarize(
+    total = population[label %in% c("Male:", "Female:")],
+    bachelor_plus = sum(
+      population[label %in% c(
+        "Bachelor's degree",
+        "Master's degree",
+        "Professional school degree",
+        "Doctorate degree"
+      )]
+    ),
+    bachelor_pct = bachelor_plus / total * 100) |>
+  ungroup() |>
+  filter(!state %in% c("District of Columbia", "Puerto Rico"))
+  
+gender_plot <- gender_bachelor |>
+  select(state, sex, bachelor_pct) |>
+  pivot_wider(
+    names_from = sex,
+    values_from = bachelor_pct
+  ) |>
+  mutate(
+    state = reorder(state, Female)
+  )
+
+gender_bachelor <- gender_bachelor |>
+  mutate(state = factor(state, levels = levels(gender_plot$state)))
+
+gender_plot |>
+  ggplot(aes(y = state)) +
+  geom_segment(
+    aes(
+      x = Male,
+      xend = Female,
+      yend = state
+    ),
+    linewidth = 0.7,
+    color = "grey"
+  ) +
+  geom_point(
+    data = gender_bachelor,
+    aes(
+      x = bachelor_pct,
+      fill = sex
+      ),
+    shape = 21,
+    size = 3
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Male" = "steelblue",
+      "Female" = "indianred"),
+      breaks = c("Male", "Female")
+    ) +
+  scale_x_continuous(
+    labels = scales::label_percent(scale = 1)
+  ) +
+  labs(
+    title = "Gender Differences in Educational Attainment Across U.S. States",
+    subtitle = "Share of adults age 25 and older with a bachelor's degree or higher, 2024",
+    x = "Bachelor's degree or higher",
+    y = NULL,
+    fill = "Sex",
+    caption = "Source: U.S. Census Bureau, 2024 American Community Survey 1-Year Estimates"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "top",
+    legend.title = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.caption = element_text(hjust = 0)
+  )
+```
+
+## 4. 
+
+
 
 
 
