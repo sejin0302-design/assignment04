@@ -10,6 +10,7 @@ execute:
 editor_options: 
   chunk_output_type: console
 ---
+# Education, Gender, and Economic Outcomes in the United States
 
 ## 1. Educational Attainment Across U.S. States
 
@@ -292,9 +293,88 @@ gender_plot |>
   )
 ```
 
-## 4. 
+## 4. Earnings Rise with Education, but the Gender Gap Persists
+
+Median earnings increase with educational attainment for both men and women. However, a gender earnings gap persists across all education levels, with the difference becoming more pronounced among those with bachelor’s and graduate degrees.  
+(Data source: [U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B20004](https://data.census.gov/table?q=B20004&g=010XX00US&y=2024)
+
+```{r}
+earning <- read_csv("data/B20004.csv")
+glimpse(earning)
+
+earning <- earning |>
+  rename(
+    label = `Label (Grouping)`,
+    median_earning = `United States!!Estimate`,
+    moe = `United States!!Margin of Error`
+  ) |>
+  mutate(
+    label = str_trim(label),
+    sex = case_when(
+      label == "Male:" ~ "Male",
+      label == "Female:" ~ "Female"
+    )) |>
+  fill(sex) |>
+  filter(!is.na(sex)) |>
+  filter(!label %in% c("Male:", "Female:"))
 
 
+earning <- earning |>
+  mutate(
+    moe = parse_number(moe),
+    label = factor(
+      label,
+      levels = c(
+        "Less than high school graduate",
+        "High school graduate (includes equivalency)",
+        "Some college or associate's degree",
+        "Bachelor's degree",
+        "Graduate or professional degree"
+      ),
+      labels = c(
+        "< High School",
+        "High School",
+        "Some College /\nAssociate's",
+        "Bachelor's",
+        "Graduate"
+      )))
+
+ggplot(
+  earning,
+  aes(
+    x = label,
+    y = median_earning,
+    color = sex,
+    group = sex
+  )
+) +
+  geom_line(
+    linewidth = 0.8
+  ) +
+  geom_point(
+    size = 3,
+    shape = 15
+  ) +
+  scale_y_continuous(
+    labels = scales::label_dollar(),
+    breaks = seq(20000, 120000, 20000),
+    limits = c(20000, 120000)
+  ) +
+  labs(
+    title = "Earnings Rise with Education, but the Gender Gap Persists",
+    subtitle = "Median earnings by sex and educational attainment, United States, 2024",
+    x = "Educational Attainment",
+    y = "Median Earning",
+    color = NULL,
+    caption = "Source: U.S. Census Bureau, 2024 American Community Survey (ACS)"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "top",
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.caption = element_text(hjust = 0))
+```
 
 
 
