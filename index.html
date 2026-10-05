@@ -2894,7 +2894,7 @@ $ `Puerto Rico!!Margin of Error`          &lt;chr&gt; &quot;±3,821&quot;, &quot
 </div>
 </section>
 <section id="earnings-rise-with-education-but-the-gender-gap-persists" class="level2">
-<h2 class="anchored" data-anchor-id="earnings-rise-with-education-but-the-gender-gap-persists">4.Earnings Rise with Education, but the Gender Gap Persists</h2>
+<h2 class="anchored" data-anchor-id="earnings-rise-with-education-but-the-gender-gap-persists">4. Earnings Rise with Education, but the Gender Gap Persists</h2>
 <p>Median earnings increase with educational attainment for both men and women. However, a gender earnings gap persists across all education levels, with the difference becoming more pronounced among those with bachelor’s and graduate degrees.<br>
 (Data source: <a href="https://data.census.gov/table?q=B20004&amp;g=010XX00US&amp;y=2024">U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B20004</a></p>
 <div class="cell">
@@ -2987,6 +2987,120 @@ $ `United States!!Margin of Error` &lt;chr&gt; &quot;±157&quot;, &quot;±133&qu
 </div>
 </div>
 </div>
+</section>
+<section id="visualization-requirements-checklist" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-requirements-checklist">Visualization Requirements Checklist</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Requirement Category</th>
+<th style="text-align: left;">Specific Element / Code Used</th>
+<th style="text-align: left;">Graph # (1, 2, 3, or 4)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Geom 1</strong></td>
+<td style="text-align: left;"><code>geom_col()</code></td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Geom 2</strong></td>
+<td style="text-align: left;"><code>geom_point()</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Geom 3</strong></td>
+<td style="text-align: left;"><code>geom_smooth()</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Geom 4</strong></td>
+<td style="text-align: left;"><code>geom_segment()</code></td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Geom 5</strong></td>
+<td style="text-align: left;"><code>geom_line()</code></td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Aesthetic 1</strong> <em>(inside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>x = bachelor_pct</code></td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Aesthetic 2</strong> <em>(inside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>color = region</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Aesthetic 3</strong> <em>(inside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>shape = region</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Aesthetic 4</strong> <em>(inside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>xend = female</code></td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Aesthetic 5</strong> <em>(inside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>fill = sex</code></td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Aesthetic 6</strong> <em>(inside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>group = sex</code></td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Non-Aesthetic 1</strong> <em>(outside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>fill = &quot;steelblue&quot;</code></td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Non-Aesthetic 2</strong> <em>(outside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>width = 0.8</code></td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Non-Aesthetic 3</strong> <em>(outside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>size = 3</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Non-Aesthetic 4</strong> <em>(outside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>alpha = 0.7</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Non-Aesthetic 5</strong> <em>(outside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>color = &quot;black&quot;</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Non-Aesthetic 6</strong> <em>(outside <code>aes()</code>)</em></td>
+<td style="text-align: left;"><code>linewidth = 0.7</code></td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Custom Scale 1</strong></td>
+<td style="text-align: left;"><code>scale_shape_manual()</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Custom Scale 2</strong></td>
+<td style="text-align: left;"><code>scale_y_continuous()</code></td>
+<td style="text-align: left;">2</td>
+</tr>
+</tbody>
+</table>
 </section>
 </section>
 

@@ -376,6 +376,29 @@ ggplot(
     plot.caption = element_text(hjust = 0))
 ```
 
+## Visualization Requirements Checklist
+| Requirement Category | Specific Element / Code Used | Graph # (1, 2, 3, or 4) |
+| :--- | :--- | :--- |
+| **Geom 1** | `geom_col()` | 1 |
+| **Geom 2** | `geom_point()` | 2 |
+| **Geom 3** | `geom_smooth()` | 2 |
+| **Geom 4** | `geom_segment()` | 3 |
+| **Geom 5** | `geom_line()` | 4 |
+| **Aesthetic 1** *(inside `aes()`)* | `x = bachelor_pct` | 1 |
+| **Aesthetic 2** *(inside `aes()`)* | `color = region` | 2 |
+| **Aesthetic 3** *(inside `aes()`)* | `shape = region` | 2 |
+| **Aesthetic 4** *(inside `aes()`)* | `xend = female` | 3 |
+| **Aesthetic 5** *(inside `aes()`)* | `fill = sex` | 3 |
+| **Aesthetic 6** *(inside `aes()`)* | `group = sex` | 4 |
+| **Non-Aesthetic 1** *(outside `aes()`)* | `fill = "steelblue"` | 1 |
+| **Non-Aesthetic 2** *(outside `aes()`)* | `width = 0.8` | 1 |
+| **Non-Aesthetic 3** *(outside `aes()`)* | `size = 3` | 2 |
+| **Non-Aesthetic 4** *(outside `aes()`)* | `alpha = 0.7` | 2 |
+| **Non-Aesthetic 5** *(outside `aes()`)* | `color = "black"` | 2 |
+| **Non-Aesthetic 6** *(outside `aes()`)* | `linewidth = 0.7` | 3 |
+| **Custom Scale 1** | `scale_shape_manual()` | 2 |
+| **Custom Scale 2** | `scale_y_continuous()` | 2 |
+
 
 
 
