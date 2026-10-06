@@ -14,7 +14,7 @@ editor_options:
 
 ## 1. Educational Attainment Across U.S. States
 
-This visualization compares the share of adults age 25 and older with a bachelor's degree or higher across the 50 U.S. states in 2024. Educational attainment varies considerably across states, providing an overview of geographic differences in higher education attainment.  
+The first visualization provides an overview of educational attainment among adults age 25 and older across the 50 U.S. states in 2024. The share with a bachelor’s degree or higher varies considerably across states, showing clear geographic differences. These differences provide a starting point for examining whether higher educational attainment is associated with higher household income. From a policy perspective, the variation may help identify states where expanding access to higher education could be particularly relevant.  
 (Data source: [U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B15003](https://data.census.gov/table?q=B15003&g=010XX00US$0400000&y=2024))
 
 ```{r}
@@ -23,7 +23,6 @@ This visualization compares the share of adults age 25 and older with a bachelor
 library(tidyverse)
 
 education <- read_csv("data/B15003.csv")
-glimpse(education)
 
 education <- education |>
   select(`Label (Grouping)`, ends_with("Estimate")) |>
@@ -89,12 +88,11 @@ education_bachelor |>
 
 ## 2. Educational Attainment and Household Income
 
-The first visualization showed substantial differences in educational attainment across states. This visualization examines whether those differences are associated with household income. Each point represents a state, with colors and shapes indicating Census regions.  
-(Data source: [U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B15003](https://data.census.gov/table?q=B19013&g=010XX00US$0400000&y=2024)
+The first visualization showed substantial differences in educational attainment across states. This visualization examines whether those differences are associated with household income and shows a positive relationship: states with higher shares of adults holding a bachelor's degree or higher generally have higher median household incomes. Although this relationship does not establish that higher educational attainment causes higher income, it suggests that education and economic outcomes are closely associated across states. From a policy perspective, the pattern highlights the importance of considering education alongside other economic and regional factors when examining differences in household income across states.  
+(Data source: [U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B19013](https://data.census.gov/table?q=B19013&g=010XX00US$0400000&y=2024)
 
 ```{r}
 income <- read_csv("data/B19013.csv")
-glimpse(income)
 
 income <- income |>
   select(ends_with("Estimate")) |>
@@ -172,18 +170,13 @@ education_income |>
 
 ## 3. Gender Differences in Educational Attainment
 
-The first two visualizations examined educational attainment across states and its relationship with household income. This visualization adds a demographic dimension by comparing the share of men and women age 25 and older with a bachelor's degree or higher across states. The distance between the two points represents the gender gap in educational attainment within each state.  
+The first two visualizations examined educational attainment across states and its relationship with household income. This visualization adds a gender dimension by comparing bachelor's degree attainment between men and women across states. Women generally have higher rates of bachelor's degree attainment than men across U.S. states, although the size of the gap varies by state. This pattern raises an important question: does women's higher educational attainment translate into similar or higher economic outcomes?  
 (Data source: [U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B15002](https://data.census.gov/table?q=B15002&g=010XX00US$0400000&y=2024)
 
 ```{r}
 #| fig-height: 10
 
 gender <- read_csv("data/B15002.csv")
-glimpse(gender)
-
-gender |>
-  select(`Label (Grouping)`) |>
-  print(n = Inf)
 
 gender <- gender |>
   mutate(
@@ -295,12 +288,11 @@ gender_plot |>
 
 ## 4. Earnings Rise with Education, but the Gender Gap Persists
 
-Median earnings increase with educational attainment for both men and women. However, a gender earnings gap persists across all education levels, with the difference becoming more pronounced among those with bachelor’s and graduate degrees.  
+The previous visualization showed that women generally have higher rates of bachelor’s degree attainment than men across states. However, median earnings are higher for men at every level of educational attainment, even as earnings increase with education for both groups. The earnings gap also becomes larger at the bachelor’s and graduate levels. This contrast suggests that differences in educational attainment alone do not fully explain the gender gap in earnings, highlighting the need to consider other labor market factors.  
 (Data source: [U.S. Census Bureau, 2024 ACS 1-Year Estimates, Table B20004](https://data.census.gov/table?q=B20004&g=010XX00US&y=2024)
 
 ```{r}
 earning <- read_csv("data/B20004.csv")
-glimpse(earning)
 
 earning <- earning |>
   rename(
@@ -322,6 +314,7 @@ earning <- earning |>
 earning <- earning |>
   mutate(
     moe = parse_number(moe),
+    sex = factor(sex, levels = c("Male", "Female")),
     label = factor(
       label,
       levels = c(
